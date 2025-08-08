@@ -5,6 +5,8 @@ import 'package:trailtales/routes/route_generator.dart';
 import 'package:trailtales/utils/app_theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized(); // Keep this if you have async setup later
+
   runApp(const TrailTalesApp());
 }
 

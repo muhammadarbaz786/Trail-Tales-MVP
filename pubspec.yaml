@@ -20,14 +20,6 @@ dependencies:
   # 🔊 Audio
   just_audio: ^0.9.36
 
-  # 📦 Firebase
-  firebase_core: ^3.1.0
-  firebase_auth: ^5.1.0
-  cloud_firestore: ^5.1.0
-  firebase_storage: ^12.1.0
-  firebase_analytics: ^11.1.0
-  firebase_messaging: ^15.1.0
-
   # 👣 Motion Detection
   pedometer: ^4.0.1
   sensors_plus: ^4.0.2
