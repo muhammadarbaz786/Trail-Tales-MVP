@@ -55,106 +55,103 @@ class _SignUpFormState extends State<SignUpForm> {
     final isDark = theme.brightness == Brightness.dark;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // Responsive max width: 95% width on smaller screens, max 700 on tablets and above
-    final maxWidth = screenWidth < 700 ? screenWidth * 0.95 : 700.0;
+    // 🔹 Minimal horizontal padding so fields almost touch screen edges
+    final fieldPadding = screenWidth * 0.03; // 3% of screen width
 
     return Form(
       key: _formKey,
-      child: Center(
-        child: Container(
-          width: maxWidth,
-          padding: const EdgeInsets.symmetric(horizontal: 12), // Horizontal padding around container
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Full Name Field with inner horizontal padding
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: AuthTextField(
-                  controller: _fullNameController,
-                  labelText: 'Full Name',
-                  prefixIcon: Icons.person_outline,
-                  keyboardType: TextInputType.name,
-                  validator: _validateFullName,
-                  textInputAction: TextInputAction.next,
-                  autocorrect: true,
-                ),
-              ),
-              const SizedBox(height: 18),
-
-              // Email Field with padding
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: AuthTextField(
-                  controller: _emailController,
-                  labelText: 'Email',
-                  prefixIcon: Icons.email_outlined,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: _validateEmail,
-                  textInputAction: TextInputAction.next,
-                  autocorrect: false,
-                ),
-              ),
-              const SizedBox(height: 18),
-
-              // Password Field with padding
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: AuthTextField(
-                  controller: _passwordController,
-                  labelText: 'Password (min 6 chars)',
-                  prefixIcon: Icons.lock_outline,
-                  isPassword: true,
-                  validator: _validatePassword,
-                  textInputAction: TextInputAction.next,
-                  autocorrect: false,
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              // Password Strength Indicator with padding
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: PasswordStrengthIndicator(strength: _passwordStrength),
-              ),
-              const SizedBox(height: 18),
-
-              // Confirm Password Field with padding
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: AuthTextField(
-                  controller: _confirmPasswordController,
-                  labelText: 'Confirm Password',
-                  prefixIcon: Icons.lock_outline,
-                  isPassword: true,
-                  validator: _validateConfirmPassword,
-                  textInputAction: TextInputAction.done,
-                  autocorrect: false,
-                ),
-              ),
-              const SizedBox(height: 18),
-
-              // Terms Checkbox (no extra horizontal padding needed)
-              _buildTermsCheckbox(isDark),
-              const SizedBox(height: 28),
-
-              // Sign Up Button with padding
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: AuthButton(
-                  text: 'Sign Up',
-                  onPressed: (_isLoading || !_acceptTerms) ? null : _handleSignUp,
-                  isLoading: _isLoading,
-                  isPrimary: true,
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Sign In Link (centered, no padding needed)
-              _buildSignInLink(isDark),
-            ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Full Name
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: fieldPadding),
+            child: AuthTextField(
+              controller: _fullNameController,
+              labelText: 'Full Name',
+              prefixIcon: Icons.person_outline,
+              keyboardType: TextInputType.name,
+              validator: _validateFullName,
+              textInputAction: TextInputAction.next,
+              autocorrect: true,
+            ),
           ),
-        ),
+          const SizedBox(height: 18),
+
+          // Email
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: fieldPadding),
+            child: AuthTextField(
+              controller: _emailController,
+              labelText: 'Email',
+              prefixIcon: Icons.email_outlined,
+              keyboardType: TextInputType.emailAddress,
+              validator: _validateEmail,
+              textInputAction: TextInputAction.next,
+              autocorrect: false,
+            ),
+          ),
+          const SizedBox(height: 18),
+
+          // Password
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: fieldPadding),
+            child: AuthTextField(
+              controller: _passwordController,
+              labelText: 'Password (min 6 chars)',
+              prefixIcon: Icons.lock_outline,
+              isPassword: true,
+              validator: _validatePassword,
+              textInputAction: TextInputAction.next,
+              autocorrect: false,
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          // Password Strength
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: fieldPadding),
+            child: PasswordStrengthIndicator(strength: _passwordStrength),
+          ),
+          const SizedBox(height: 18),
+
+          // Confirm Password
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: fieldPadding),
+            child: AuthTextField(
+              controller: _confirmPasswordController,
+              labelText: 'Confirm Password',
+              prefixIcon: Icons.lock_outline,
+              isPassword: true,
+              validator: _validateConfirmPassword,
+              textInputAction: TextInputAction.done,
+              autocorrect: false,
+            ),
+          ),
+          const SizedBox(height: 18),
+
+          // Terms Checkbox
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: fieldPadding),
+            child: _buildTermsCheckbox(isDark),
+          ),
+          const SizedBox(height: 28),
+
+          // Sign Up Button
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: fieldPadding),
+            child: AuthButton(
+              text: 'Sign Up',
+              onPressed: (_isLoading || !_acceptTerms) ? null : _handleSignUp,
+              isLoading: _isLoading,
+              isPrimary: true,
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Sign In Link
+          _buildSignInLink(isDark),
+        ],
       ),
     );
   }
@@ -248,17 +245,13 @@ class _SignUpFormState extends State<SignUpForm> {
       return 'Please enter your full name';
     }
     final trimmed = value.trim();
-
     if (trimmed.length < 2) {
       return 'Name must be at least 2 characters';
     }
-
     final nameRegExp = RegExp(r"^[a-zA-Z]+([ '-][a-zA-Z]+)*$");
-
     if (!nameRegExp.hasMatch(trimmed)) {
       return 'Please enter a valid name (letters, spaces, apostrophes, hyphens only)';
     }
-
     return null;
   }
 
@@ -298,7 +291,6 @@ class _SignUpFormState extends State<SignUpForm> {
     int score = 0;
     if (password.length >= 8) score++;
     if (password.length >= 12) score++;
-
     if (RegExp(r'[a-z]').hasMatch(password)) score++;
     if (RegExp(r'[A-Z]').hasMatch(password)) score++;
     if (RegExp(r'[0-9]').hasMatch(password)) score++;
@@ -311,7 +303,6 @@ class _SignUpFormState extends State<SignUpForm> {
 
   void _handleSignUp() async {
     if (!_formKey.currentState!.validate()) return;
-
     if (!_acceptTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -323,7 +314,6 @@ class _SignUpFormState extends State<SignUpForm> {
     }
 
     setState(() => _isLoading = true);
-
     try {
       await widget.onSignUp(
         _fullNameController.text.trim(),

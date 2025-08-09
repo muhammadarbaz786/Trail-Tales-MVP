@@ -44,19 +44,16 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _setupAnimations() {
-    // Fade animation for overall screen
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
 
-    // Scale animation for logo
     _scaleController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
 
-    // Slide animation for text
     _slideController = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
@@ -88,14 +85,11 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _startAnimationSequence() async {
-    // Start fade animation immediately
     _fadeController.forward();
 
-    // Start scale animation after a slight delay
     await Future.delayed(const Duration(milliseconds: 200));
     if (mounted) _scaleController.forward();
 
-    // Start slide animation for text
     await Future.delayed(const Duration(milliseconds: 400));
     if (mounted) _slideController.forward();
   }
@@ -127,17 +121,27 @@ class _SplashScreenState extends State<SplashScreen>
             child: SplashBackground(
               isDark: isDark,
               child: SafeArea(
-                child: Column(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: _buildLogoSection(),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: _buildBottomSection(),
-                    ),
-                  ],
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      physics: const ClampingScrollPhysics(),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
+                        ),
+                        child: IntrinsicHeight(
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: _buildLogoSection(),
+                              ),
+                              _buildBottomSection(), // No Expanded here
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -152,18 +156,14 @@ class _SplashScreenState extends State<SplashScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Animated Logo
           ScaleTransition(
             scale: _scaleAnimation,
             child: const AnimatedLogo(
               size: 120,
-              icon: Icons.auto_stories, // or use Icons.book_outlined
+              icon: Icons.auto_stories,
             ),
           ),
-
           const SizedBox(height: 32),
-
-          // App Title with Slide Animation
           SlideTransition(
             position: _slideAnimation,
             child: FadeTransition(
@@ -171,10 +171,7 @@ class _SplashScreenState extends State<SplashScreen>
               child: _buildAppTitle(),
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // Subtitle with delayed animation
           SlideTransition(
             position: _slideAnimation,
             child: FadeTransition(
@@ -189,7 +186,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   Widget _buildAppTitle() {
     return Text(
-      'StoryTeller', // Replace with your app name
+      'StoryTeller',
       style: TextStyle(
         fontSize: 36,
         fontWeight: FontWeight.bold,
@@ -229,15 +226,10 @@ class _SplashScreenState extends State<SplashScreen>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
-        mainAxisSize: MainAxisSize.min, // 🔹 prevents overflow
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // Loading Indicator
           const CustomLoadingIndicator(),
-
           const SizedBox(height: 16),
-
-          // Loading Text
           FadeTransition(
             opacity: _fadeAnimation,
             child: Text(
@@ -251,10 +243,7 @@ class _SplashScreenState extends State<SplashScreen>
               textAlign: TextAlign.center,
             ),
           ),
-
           const SizedBox(height: 32),
-
-          // Brand/Version Info
           FadeTransition(
             opacity: _fadeAnimation,
             child: Text(
@@ -267,22 +256,16 @@ class _SplashScreenState extends State<SplashScreen>
               textAlign: TextAlign.center,
             ),
           ),
-
           const SizedBox(height: 8),
         ],
       ),
     );
   }
 
-
   void _navigateToSignIn() async {
-    // Add a small delay for better UX
     await Future.delayed(const Duration(milliseconds: 500));
-
     if (mounted) {
-      // Animate out before navigation
       await _fadeController.reverse();
-
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
@@ -292,10 +275,8 @@ class _SplashScreenState extends State<SplashScreen>
             const begin = Offset(1.0, 0.0);
             const end = Offset.zero;
             const curve = Curves.easeInOut;
-
-            var tween = Tween(begin: begin, end: end)
-                .chain(CurveTween(curve: curve));
-
+            var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
             return SlideTransition(
               position: animation.drive(tween),
               child: child,

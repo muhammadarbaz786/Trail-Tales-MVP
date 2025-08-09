@@ -32,40 +32,29 @@ class AuthTextField extends StatefulWidget {
   State<AuthTextField> createState() => _AuthTextFieldState();
 }
 
-class _AuthTextFieldState extends State<AuthTextField> with SingleTickerProviderStateMixin {
+class _AuthTextFieldState extends State<AuthTextField>
+    with SingleTickerProviderStateMixin {
   bool _obscureText = true;
   bool _isFocused = false;
   late AnimationController _animationController;
   late Animation<double> _focusAnimation;
-  late Animation<Color?> _colorAnimation;
 
   @override
   void initState() {
     super.initState();
-    _setupAnimations();
-  }
-
-  void _setupAnimations() {
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-
     _focusAnimation = Tween<double>(
       begin: 1.0,
       end: 1.02,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-
-    _colorAnimation = ColorTween(
-      begin: Colors.grey.shade300,
-      end: const Color(0xFF6366F1), // Indigo color
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   @override
@@ -75,10 +64,7 @@ class _AuthTextFieldState extends State<AuthTextField> with SingleTickerProvider
   }
 
   void _handleFocusChange(bool hasFocus) {
-    setState(() {
-      _isFocused = hasFocus;
-    });
-
+    setState(() => _isFocused = hasFocus);
     if (hasFocus) {
       _animationController.forward();
     } else {
@@ -96,15 +82,20 @@ class _AuthTextFieldState extends State<AuthTextField> with SingleTickerProvider
         return Transform.scale(
           scale: _focusAnimation.value,
           child: Container(
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(vertical: 12),
+            constraints: const BoxConstraints(minHeight: 65), // Bigger height
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              boxShadow: _isFocused ? [
+              boxShadow: _isFocused
+                  ? [
                 BoxShadow(
-                  color: const Color(0xFF6366F1).withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
+                  color: const Color(0xFF6366F1).withOpacity(0.18),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
                 ),
-              ] : [],
+              ]
+                  : [],
             ),
             child: TextFormField(
               controller: widget.controller,
@@ -115,9 +106,9 @@ class _AuthTextFieldState extends State<AuthTextField> with SingleTickerProvider
               enabled: widget.enabled,
               onTap: widget.onTap,
               validator: widget.validator,
-              onTapOutside: (event) => FocusScope.of(context).unfocus(),
+              onTapOutside: (_) => FocusScope.of(context).unfocus(),
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.w500,
                 color: isDark ? Colors.white : Colors.grey.shade800,
               ),
@@ -125,32 +116,36 @@ class _AuthTextFieldState extends State<AuthTextField> with SingleTickerProvider
                 labelText: widget.labelText,
                 hintText: widget.hintText,
                 labelStyle: TextStyle(
+                  fontSize: 16,
                   color: _isFocused
                       ? const Color(0xFF6366F1)
-                      : (isDark ? Colors.grey.shade400 : Colors.grey.shade600),
-                  fontWeight: FontWeight.w500,
-                ),
-                hintStyle: TextStyle(
-                  color: isDark ? Colors.grey.shade500 : Colors.grey.shade400,
-                  fontWeight: FontWeight.w400,
+                      : (isDark
+                      ? Colors.grey.shade300
+                      : Colors.grey.shade600),
                 ),
                 prefixIcon: widget.prefixIcon != null
                     ? Icon(
                   widget.prefixIcon,
                   color: _isFocused
                       ? const Color(0xFF6366F1)
-                      : (isDark ? Colors.grey.shade400 : Colors.grey.shade500),
-                  size: 22,
+                      : (isDark
+                      ? Colors.grey.shade400
+                      : Colors.grey.shade500),
+                  size: 26,
                 )
                     : null,
                 suffixIcon: widget.isPassword
                     ? IconButton(
                   icon: Icon(
-                    _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    _obscureText
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
                     color: _isFocused
                         ? const Color(0xFF6366F1)
-                        : (isDark ? Colors.grey.shade400 : Colors.grey.shade500),
-                    size: 22,
+                        : (isDark
+                        ? Colors.grey.shade400
+                        : Colors.grey.shade500),
+                    size: 24,
                   ),
                   onPressed: () {
                     setState(() {
@@ -161,55 +156,39 @@ class _AuthTextFieldState extends State<AuthTextField> with SingleTickerProvider
                     : null,
                 filled: true,
                 fillColor: isDark
-                    ? Colors.grey.shade800.withOpacity(0.3)
-                    : Colors.grey.shade50,
+                    ? Colors.grey.shade800.withOpacity(0.4)
+                    : Colors.grey.shade100,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide(
-                    color: isDark ? Colors.grey.shade700 : Colors.grey.shade300,
-                    width: 1.5,
+                    color: isDark
+                        ? Colors.grey.shade700
+                        : Colors.grey.shade400,
+                    width: 1.6,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide(
-                    color: isDark ? Colors.grey.shade700 : Colors.grey.shade300,
-                    width: 1.5,
+                    color: isDark
+                        ? Colors.grey.shade700
+                        : Colors.grey.shade400,
+                    width: 1.6,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: const BorderSide(
                     color: Color(0xFF6366F1),
-                    width: 2.0,
-                  ),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(
-                    color: Colors.red.shade400,
-                    width: 1.5,
-                  ),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(
-                    color: Colors.red.shade400,
-                    width: 2.0,
+                    width: 2,
                   ),
                 ),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 20,
-                  vertical: 18,
-                ),
-                errorStyle: TextStyle(
-                  color: Colors.red.shade600,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 13,
+                  vertical: 20, // Bigger touch area
                 ),
               ),
-              onChanged: (value) {
-                // Trigger rebuild to update focus state
+              onChanged: (_) {
                 if (_isFocused != FocusScope.of(context).hasFocus) {
                   _handleFocusChange(FocusScope.of(context).hasFocus);
                 }

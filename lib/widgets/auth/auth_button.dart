@@ -22,8 +22,11 @@ class AuthButton extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return SizedBox(
-      height: 56,
-      child: isPrimary ? _buildPrimaryButton(isDark) : _buildSecondaryButton(isDark),
+      width: double.infinity, // ✅ Always full width
+      height: 56, // ✅ Consistent height
+      child: isPrimary
+          ? _buildPrimaryButton(isDark)
+          : _buildSecondaryButton(isDark),
     );
   }
 
@@ -74,19 +77,20 @@ class AuthButton extends StatelessWidget {
 
     if (icon != null) {
       return Row(
-        mainAxisSize: MainAxisSize.min, // shrink to fit content
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center, // ✅ Center icon & text
+        mainAxisSize: MainAxisSize.max, // ✅ Take full space
         children: [
           Icon(icon, size: 20),
           const SizedBox(width: 8),
-          Flexible(  // Make text flexible to prevent overflow
+          Flexible(
             child: Text(
               text,
               style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
-              overflow: TextOverflow.ellipsis, // gracefully truncate
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
             ),
           ),
         ],
@@ -99,6 +103,7 @@ class AuthButton extends StatelessWidget {
         fontSize: 18,
         fontWeight: FontWeight.bold,
       ),
+      textAlign: TextAlign.center,
       overflow: TextOverflow.ellipsis,
     );
   }

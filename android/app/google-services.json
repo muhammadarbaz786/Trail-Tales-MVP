@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "830616967064",
+    "project_id": "trailtales-mvp-56737",
+    "storage_bucket": "trailtales-mvp-56737.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830616967064:android:ce9e14f6baba8df324fded",
+        "android_client_info": {
+          "package_name": "com.example.trailtales"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2V-TKZ5TnhGmyGKKgnRZue48w-jIaizI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

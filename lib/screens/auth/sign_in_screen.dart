@@ -54,19 +54,16 @@ class _SignInScreenState extends State<SignInScreen> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    // Set scaffold background to pure white explicitly
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: FadeTransition(
-              opacity: _fadeAnimation,
-              child: SlideTransition(
-                position: _slideAnimation,
-                child: _buildSignInContainer(),
-              ),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.zero, // removed horizontal padding
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: SlideTransition(
+              position: _slideAnimation,
+              child: _buildSignInContainer(),
             ),
           ),
         ),
@@ -74,21 +71,15 @@ class _SignInScreenState extends State<SignInScreen> with TickerProviderStateMix
     );
   }
 
-  // In your SignInScreen, update the _buildSignInContainer method:
-
   Widget _buildSignInContainer() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Increase max width from 700 to 800 for wider input fields
-        double containerWidth = constraints.maxWidth < 800 ? constraints.maxWidth : 800;
+        double containerWidth = constraints.maxWidth; // full width
 
         return Container(
           width: containerWidth,
-          padding: const EdgeInsets.all(16),  // Reduced padding for more width
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16), // minimal padding
+          color: Colors.white, // full background
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -115,7 +106,6 @@ class _SignInScreenState extends State<SignInScreen> with TickerProviderStateMix
       },
     );
   }
-
 
   void _handleSignIn(String email, String password) async {
     try {

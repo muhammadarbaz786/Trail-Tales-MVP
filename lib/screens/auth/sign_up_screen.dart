@@ -54,17 +54,15 @@ class _SignUpScreenState extends State<SignUpScreen> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,  // Full white background
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: FadeTransition(
-              opacity: _fadeAnimation,
-              child: SlideTransition(
-                position: _slideAnimation,
-                child: _buildSignUpContainer(),
-              ),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.zero, // 🔹 remove global padding
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: SlideTransition(
+              position: _slideAnimation,
+              child: _buildSignUpContainer(),
             ),
           ),
         ),
@@ -75,25 +73,17 @@ class _SignUpScreenState extends State<SignUpScreen> with TickerProviderStateMix
   Widget _buildSignUpContainer() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Increase max width up to 700 or 750 for wider inputs
-        double maxWidth = constraints.maxWidth < 750 ? constraints.maxWidth : 750;
-
-        // Reduced horizontal padding for bigger width
-        double horizontalPadding = MediaQuery.of(context).size.width < 350 ? 8.0 : 12.0;
+        double maxWidth = constraints.maxWidth < 800 ? constraints.maxWidth : 800;
 
         return Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: maxWidth),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 24),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
-              ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0), // 🔹 edge-to-edge
               child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch, // expand children horizontally
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const SizedBox(height: 24),
                   const AuthHeader(
                     title: 'TrailTales',
                     subtitle: 'Walk. Listen. Adventure.',
@@ -106,6 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> with TickerProviderStateMix
                       Navigator.pop(context);
                     },
                   ),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
@@ -117,7 +108,6 @@ class _SignUpScreenState extends State<SignUpScreen> with TickerProviderStateMix
 
   void _handleSignUp(String fullName, String email, String password) async {
     try {
-      // TODO: Implement your real sign-up logic here
       await Future.delayed(const Duration(seconds: 2));
 
       if (mounted) {
